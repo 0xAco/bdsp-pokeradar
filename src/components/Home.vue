@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import usePokemonStore from '@/stores/pokemon';
+import Card from '@/components/Card.vue';
+import usePokemonStore from '../stores/pokemon';
 
 const pokemonStore = usePokemonStore();
 
@@ -10,20 +10,28 @@ defineProps<{
 </script>
 
 <template>
-  <h2 class="h2">{{ msg }}</h2>
-  <form class="form" @submit.prevent>
-    <h3 class="h3">Valeurs de simulation</h3>
-    <div class="form-group">
-      <label for="pokemon_rate" class="label">taux d'apparition du pokémon</label>
-      <input id="pokemon_rate" class="input text short" type="number" min="0" max="100" v-model="pokemonStore.pokemonRate" />
-      <span class="text">%</span>
-    </div>
-    <div class="form-group">
-      <label for="sample_size" class="label">taille de l'échantillon</label>
-      <input id="sample_size" class="input text long" type="number" min="100" max="10000" v-model="pokemonStore.sampleSize" />
-    </div>
-    <button type="submit" class="primary-button">Lancer la simulation</button>
-  </form>
+  <h2>{{ msg }}</h2>
+  <Card title="Valeurs de simulation">
+    <template v-slot:content>
+      <form id="simulationValues" class="form" @submit.prevent>
+        <div class="form-group">
+          <div class="col-label">
+            <input id="pokemon_rate" class="input text short" type="number" min="0" max="100" v-model="pokemonStore.pokemonRate"/><span class="text">%</span>
+          </div>
+            <label for="pokemon_rate" class="label">taux d'apparition du pokémon</label>
+        </div>
+        <div class="form-group">
+          <div class="col-label">
+            <input id="sample_size" class="input text long" type="number" min="100" max="10000" v-model="pokemonStore.sampleSize"/>
+          </div>
+          <label for="sample_size" class="label">taille de l'échantillon</label>
+        </div>
+      </form>
+    </template>
+    <template v-slot:footer>
+      <button slot="footer" type="submit" form="simulationValues" class="primary-button">Lancer la simulation</button>
+    </template>
+  </Card>
 </template>
 
 <style scoped>
@@ -38,18 +46,14 @@ defineProps<{
   color: #524232;
   margin: 30px 0;
 }
-.form {
-  padding: 5px 40px 20px 40px;
-  width: 300px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  background-color: linen;
-  box-shadow: 5px 5px 0 0 rgb(149, 127, 105, .2);
-}
 .form-group {
   margin-bottom: 20px;
+}
+.col-label {
+  display: inline-block;
+  text-align: right;
+  margin-right: 10px;
+  width: 70px;
 }
 .primary-button {
   margin-top: 10px;
@@ -58,7 +62,7 @@ defineProps<{
   font-family: 'Cantarell';
   color: linen;
   border: solid #524232 2px;
-  background: linear-gradient(120deg, #957f69 -50%, #524232 100%);
+  background: linear-gradient(315deg, #957f69 -50%, #524232 80%);
   font-size: .9em;
   font-weight: bold;
   border-radius: 5px;
@@ -70,7 +74,6 @@ defineProps<{
   cursor: pointer;
 }
 .label {
-  display: block;
   margin: 5px;
   color: #524232;
 }
